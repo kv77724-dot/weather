@@ -1,14 +1,33 @@
 import React from 'react';
 import {View, Text, StyleSheet, Image, ImageBackground} from 'react-native';
+import Icon from 'react-native-vector-icons/Feather';
 
 const Index = (props) => {
   return (
     <View style={styles.parent_container}>
       <View style={{alignItems: 'center'}}>
         <ImageBackground
-          resizeMode="contain"
-          style={styles.cloudImage}
-          source={require('../assets/backgound/cloudy_bg.png')}>
+          resizeMode="stretch"
+          style={styles.bgImage}
+          //   source={require('../assets/backgound/cloudy_bg.png')}>
+          source={require('../assets/backgound/sunny_bg.png')}>
+          <View
+            style={{
+              flexDirection: 'row',
+              justifyContent: 'center',
+              alignItems: 'center',
+              //   height: 64,
+              //   width: 64,
+            }}>
+            <Text
+              style={{
+                backgroundColor: 'white',
+                top: 20,
+                borderRadius: 50,
+              }}>
+              <Icon style={{fontSize: 50}} name="plus" color="#900" />
+            </Text>
+          </View>
           <View style={styles.topBarPosition}>
             <View style={styles.topBarContainer}>
               <Image
@@ -31,7 +50,8 @@ const Index = (props) => {
             }}>
             <ImageBackground
               resizeMode="stretch"
-              source={require('../assets/backgound/delhi_image.png')}
+              //   source={require('../assets/backgound/delhi_image.png')}
+              source={require('../assets/backgound/mumbai_image.png')}
               style={{
                 height: '95%',
                 width: '96%',
@@ -138,11 +158,15 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontSize: 32,
   },
-  cloudImage: {
+  bgImage: {
     width: '100%',
+    height: 270,
     flex: 0.6,
     alignItems: 'center',
     opacity: 1,
+    color: '#FCF1D8',
+    // shadowColor: '#FEA085',
+    // shadowOpacity: 0.8,
   },
   forecastBar: {
     flexDirection: 'row',
@@ -158,7 +182,9 @@ const styles = StyleSheet.create({
     paddingTop: '10%',
   },
   parent_container: {
-    backgroundColor: '#162840',
+    // backgroundColor: '#162840',
+    backgroundColor: '#CEA544',
+    opacity: 0.8,
     flex: 1,
     // justifyContent: 'center',
     alignItems: 'center',
