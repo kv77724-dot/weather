@@ -4,7 +4,7 @@
 import axios from 'axios';
 
 export default axios.create({
-  baseURL: 'http://dataservice.accuweather.com/forecasts/v1/daily/5day',
+  baseURL: 'http://dataservice.accuweather.com/',
   headers: {
     Host: 'dataservice.accuweather.com',
   },

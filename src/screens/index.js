@@ -1,22 +1,60 @@
-import React from 'react';
-import {View, Text, StyleSheet, Image, ImageBackground} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {View, Alert,Text, StyleSheet, Image, Button, ImageBackground, FlatList, TouchableOpacity, Modal} from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
-var weather = 'cloudy';
-var city = 'Mumbai';
+import weather from "../api/weatherApi";
+import Days from "../component/Days";
+import moment from "moment";
+import { log } from 'react-native-reanimated';
 
+var day = 'cloudy';
+var city = 'DELHI';
+var cityKey = city === "DELHI" ? "/202396" : "/204842";
+const week = `forecasts/v1/daily/5day${cityKey}`;
+const current = `currentconditions/v1${cityKey}`;
+
+console.log(current, week);
 const Index = (props) => {
+
+  const [results, setResults] = useState('');
+  const [today, setToday] = useState('');
+  const [state, setState] = useState({isVisible: false});
+
+  const searchApi = async (type, value) => {
+    try {
+      const response = await weather.get(type, {
+        params: {
+          apikey: 'nySEGUN3b4JOVu0AZ4cxctvZ0Ay4LHvy',
+          metric: true,
+          // details: true 
+        },
+      });
+      console.log(value, response.data);
+      value === "current"
+        ? setToday(response.data[0])
+        : setResults(response.data.DailyForecasts);
+    } catch (err) {
+      console.log('Something went wrong', err);
+    }
+  };
+  useEffect(() => {
+    searchApi(current, "current");
+    searchApi(week, "week");
+  }, []);
+
+  console.log("resul", results);
+
   return (
     <View
       style={[
         styles.parent_container,
-        {backgroundColor: weather === 'cloudy' ? '#162840' : '#CEA544'},
+        {backgroundColor: day === 'cloudy' ? '#162840' : '#CEA544'},
       ]}>
       <View style={{alignItems: 'center'}}>
         <ImageBackground
           resizeMode="stretch"
           style={[styles.bgImage]}
           source={
-            weather === 'cloudy'
+            day === 'cloudy'
               ? require('../assets/backgound/cloudy_bg.png')
               : require('../assets/backgound/sunny_bg.png')
           }>
@@ -53,13 +91,14 @@ const Index = (props) => {
                 // marginLeft: '4%',
               }}>
               <View style={{flex: 1, justifyContent: 'center', top: '24%'}}>
+                {/* // Above cloudy */}
                 <View
                   style={{
                     justifyContent: 'center',
                     alignItems: 'center',
                   }}>
                   <Text style={{fontSize: 60, color: 'white'}}>
-                    {18 + '\xB0'}
+                    {today !== "" ? today.Temperature.Metric.Value : 0 + '\xB0'}
                   </Text>
                 </View>
                 <View style={{flex: 1}}>
@@ -73,7 +112,8 @@ const Index = (props) => {
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
                       <Text
                         style={{fontSize: 20, marginRight: 10, color: 'white'}}>
-                        {26 + '\xB0'}
+                        {/* {1 + '\xB0'} */}
+                        {results !== "" ? results[0].Temperature.Maximum.Value : null + '\xB0'}
                       </Text>
                       <Image
                         style={{height: 8, width: 10}}
@@ -81,12 +121,12 @@ const Index = (props) => {
                       />
                     </View>
                     <View>
-                      <Text style={{fontSize: 30, color: 'white'}}>Cloudy</Text>
+                      <Text style={{ fontSize: 30, color: 'white' }}>{today !== "" ? today.WeatherText : "Clear"}</Text>
                     </View>
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
                       <Text
                         style={{fontSize: 20, marginRight: 10, color: 'white'}}>
-                        {15 + '\xB0'}
+                        {results !== "" ? results[0].Temperature.Minimum.Value : null + '\xB0'}
                       </Text>
                       <Image
                         style={{height: 8, width: 10}}
@@ -112,28 +152,60 @@ const Index = (props) => {
             right: 60,
             top: -40,
           }}>
-          <Text
-            style={{
+            <TouchableOpacity style={{
               backgroundColor: 'white',
               top: 20,
               borderRadius: 50,
+              
             }}>
-            <Icon style={{fontSize: 50}} name="plus" color="#900" />
-          </Text>
+            <Icon
+              style={{ fontSize: 50 }}
+              name="plus"
+              color="#900"
+              onPress={() => {
+                return <View style = {styles.container}>  
+                  <Modal            
+                    animationType = {"fade"}  
+                    transparent = {false}  
+                    visible = {state.isVisible}  
+                    onRequestClose = {() =>{ console.log("Modal has been closed.") } }>  
+                    {/*All views of Modal*/}  
+                        <View style = {styles.modal}>  
+                        <Text style = {styles.text}>Modal is open!</Text>  
+                        <Button title="Click To Close Modal" onPress = {() => {  
+                            setState({ isVisible:! state.isVisible})}}/>  
+                    </View>  
+                  </Modal>  
+                  {/*Button will change state to true and view will re-render*/}  
+                  {/* <Button   
+                    title="Click To Open Modal"   
+                    onPress = {() => {setState({ isVisible: true})}}  
+                  />   */}
+                </View>  
+                console.log("Add clicked..")
+              }}
+            />
+            </TouchableOpacity>
         </View>
-        <View style={styles.forecastBar}>
-          <Text style={{fontSize: 20, color: '#697F97'}}>Monday</Text>
-          <Text style={{fontSize: 20, color: '#697F97'}}>{23 + '\xB0'}</Text>
-          <Image
-            source={require('../assets/Weather_icons/sunny.png')}
-            style={{
-              height: 35,
-              width: 35,
-              //   opacity: 0.1,
-              //   color: '#697F97',
+        {console.log(results !== "" ? results[0].Day.IconPhrase : 0)}
+        {console.log(results.length)}
+        <View style={{flex: 1, marginHorizontal:10}}>
+          <FlatList
+            style={{flex:1}}
+            data={results}
+            renderItem={(result) => {
+              const day = moment(result.item.Date).format("dddd");
+              var dayCondition = result.item.Day.IconPhrase;
+              console.log(dayCondition);
+              return <Days
+                title={day}
+                temp={result.item.Temperature.Maximum.Value}
+                dayCondition={dayCondition} />
             }}
+            keyExtractor={(item) => item.Date}
           />
         </View>
+        
       </ImageBackground>
     </View>
   );
@@ -158,11 +230,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     paddingHorizontal: '2%',
-    paddingBottom: '2%',
+    paddingBottom: '1%',
     // marginVertical
   },
   lowerBg: {
-    flex: 0.4,
+    // flex: 0.4,
     height: 370,
     width: '100%',
     paddingTop: '10%',
@@ -190,6 +262,29 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     top: '10%',
   },
+  container: {  
+    flex: 1,  
+    alignItems: 'center',  
+    justifyContent: 'center',  
+    backgroundColor: '#ecf0f1',  
+  },  
+  modal: {  
+  justifyContent: 'center',  
+  alignItems: 'center',   
+  backgroundColor : "#00BCD4",   
+  height: 300 ,  
+  width: '80%',  
+  borderRadius:10,  
+  borderWidth: 1,  
+  borderColor: '#fff',    
+  marginTop: 80,  
+  marginLeft: 40,  
+   
+   },  
+   text: {  
+      color: '#3f2949',  
+      marginTop: 10  
+   }
 });
 
 export default Index;
