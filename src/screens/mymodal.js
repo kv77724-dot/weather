@@ -3,9 +3,11 @@ import {Button, Text, View, StyleSheet, TouchableOpacity} from 'react-native';
 import Modal from 'react-native-modal';
 import Icon from 'react-native-vector-icons/Feather';
 
-function ModalTester() {
+function ModalTester({name, api}) {
+  //   console.log('props', );
   const [isModalVisible, setModalVisible] = useState(false);
   const [city, setCity] = useState('Mumbai');
+
   console.log('city', city);
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
@@ -48,16 +50,20 @@ function ModalTester() {
           <TouchableOpacity
             onPress={() => {
               setCity('Mumbai');
+              name('Mumbai');
               console.log(city);
               toggleModal();
+              api();
             }}>
             <Text style={styles.city}>Mumbai</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
               setCity('Delhi');
+              name('Delhi');
               console.log(city);
               toggleModal();
+              api();
             }}>
             <Text style={styles.city}>Delhi</Text>
           </TouchableOpacity>

@@ -17,17 +17,16 @@ import moment from 'moment';
 import Modal from 'react-native-modal';
 import ModalTester from './mymodal';
 
-var day = 'cloudy';
-var city = 'DELHI';
-var cityKey = city === 'DELHI' ? '/202396' : '/204842';
-const week = `forecasts/v1/daily/5day${cityKey}`;
-const current = `currentconditions/v1${cityKey}`;
-
-console.log(current, week);
 const Index = (props) => {
   const [results, setResults] = useState('');
   const [today, setToday] = useState('');
+  const [name, setName] = useState('');
 
+  var day = today.WeatherText;
+  var city = name.toUpperCase();
+  var cityKey = city === 'DELHI' ? '/202396' : '/204842';
+  const week = `forecasts/v1/daily/5day${cityKey}`;
+  const current = `currentconditions/v1${cityKey}`;
   const searchApi = async (type, value) => {
     try {
       const response = await weather.get(type, {
@@ -56,14 +55,19 @@ const Index = (props) => {
     <View
       style={[
         styles.parent_container,
-        {backgroundColor: day === 'cloudy' ? '#162840' : '#CEA544'},
+        {
+          backgroundColor:
+            day.includes('cloudy') === true ? '#162840' : '#CEA544',
+        },
       ]}>
       <View style={{alignItems: 'center'}}>
+        {console.log('name', name)}
+        {console.log('bool :', day.includes('cloudy') === true)}
         <ImageBackground
           resizeMode="stretch"
           style={[styles.bgImage]}
           source={
-            day === 'cloudy'
+            day.includes('cloudy') === true
               ? require('../assets/backgound/cloudy_bg.png')
               : require('../assets/backgound/sunny_bg.png')
           }>
@@ -173,7 +177,13 @@ const Index = (props) => {
               top: 20,
               borderRadius: 50,
             }}>
-            <ModalTester nav={props} />
+            <ModalTester
+              name={(val) => setName(val)}
+              api={() => {
+                searchApi(current, 'current');
+                searchApi(week, 'week');
+              }}
+            />
           </TouchableOpacity>
         </View>
         {console.log(results !== '' ? results[0].Day.IconPhrase : 0)}
