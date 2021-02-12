@@ -22,7 +22,7 @@ const Index = (props) => {
   const [today, setToday] = useState('');
   const [name, setName] = useState('');
 
-  var day = today.WeatherText;
+  var day = today !== '' ? today.WeatherText : '';
   var city = name.toUpperCase();
   var cityKey = city === 'DELHI' ? '/202396' : '/204842';
   const week = `forecasts/v1/daily/5day${cityKey}`;

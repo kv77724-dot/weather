@@ -22,15 +22,13 @@ function ModalTester({name, api}) {
       {/* <Button title="Show modal" onPress={toggleModal} /> */}
       <View
         style={{
-          borderColor: 'red',
-          borderWidth: 1,
           borderRadius: 50,
           bottom: 0,
         }}>
         <Icon
           style={{fontSize: 50}}
           name="plus"
-          color="#900"
+          color="white"
           onPress={
             //   console.log('Add clicked..');
             toggleModal
@@ -41,10 +39,11 @@ function ModalTester({name, api}) {
       <Modal isVisible={isModalVisible}>
         <View
           style={{
-            height: '40%',
+            height: '20%',
             justifyContent: 'center',
             alignItems: 'center',
-            backgroundColor: 'dodgerblue',
+            backgroundColor: 'black',
+            borderRadius: 2,
             // top: 100,
           }}>
           <TouchableOpacity
@@ -76,7 +75,7 @@ function ModalTester({name, api}) {
 const styles = StyleSheet.create({
   city: {
     fontSize: 30,
-    borderColor: 'black',
+    borderColor: 'white',
     borderWidth: 2,
     width: 150,
     marginBottom: 10,
