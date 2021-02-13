@@ -50,7 +50,8 @@ function ModalTester({name, api}) {
         </Text>
       </TouchableOpacity>
 
-      <Modal isVisible={isModalVisible}>
+      <Modal isVisible={isModalVisible}
+      onBackdropPress={() => setModalVisible(false)}>
         <View
           style={{
             height: '30%',
