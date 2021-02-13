@@ -16,38 +16,42 @@ import Days from '../component/Days';
 import moment from 'moment';
 import Modal from 'react-native-modal';
 import ModalTester from './mymodal';
+import Act from "./activity";
 
 const Index = (props) => {
   const [results, setResults] = useState('');
   const [today, setToday] = useState('');
-  const [name, setName] = useState('');
+  const [name, setName] = useState(null);
+  const [isCompleted, setIsCompleted] = useState(true);
 
   var day = today !== '' ? today.WeatherText : '';
-  var city = name.toUpperCase();
-  var cityKey = city === 'DELHI' ? '/202396' : '/204842';
+  var city = name !== null ? name.toUpperCase() : null;
+  var cityKey = city !== null ? ( city === 'DELHI' ? '/202396' : '/204842' ) : null;
   const week = `forecasts/v1/daily/5day${cityKey}`;
   const current = `currentconditions/v1${cityKey}`;
+
   const searchApi = async (type, value) => {
     try {
       const response = await weather.get(type, {
         params: {
-          apikey: 'GDf7psbd695sp2G6ltEtmRjtYBHuRFJA',
+          apikey: 'jV415AKwISfTR1anFeubxLJ2gPgz1k6A',
           metric: true,
-          // details: true
         },
       });
+      setIsCompleted(true);
       console.log(value, response.data);
       value === 'current'
         ? setToday(response.data[0])
         : setResults(response.data.DailyForecasts);
     } catch (err) {
+      // setIsCompleted(true);
       console.log('Something went wrong', err);
     }
   };
-  useEffect(() => {
-    searchApi(current, 'current');
-    searchApi(week, 'week');
-  }, []);
+  // useEffect(() => {
+  //   searchApi(current, 'current');
+  //   searchApi(week, 'week');
+  // }, []);
 
   console.log('resul', results);
 
@@ -77,7 +81,7 @@ const Index = (props) => {
                 style={styles.topBarIcons}
                 source={require('../assets/ui-icons/drawer.png')}
               />
-              <Text style={styles.cityName}>{city}</Text>
+              <Text style={styles.cityName}>{city === null ? "Select a city" : city}</Text>
               <Image
                 style={styles.topBarIcons}
                 source={require('../assets/ui-icons/Setting.png')}
@@ -155,6 +159,13 @@ const Index = (props) => {
                   </View>
                 </View>
               </View>
+
+              {/* // ActivityIndicator */}
+              {console.log("Above Act compo", isCompleted)}
+              <View style={{position: "absolute", top: "60%", left: "45%"}}>
+                <Act bool={!isCompleted} />
+              </View>
+
             </ImageBackground>
           </View>
         </ImageBackground>
@@ -168,23 +179,35 @@ const Index = (props) => {
             justifyContent: 'center',
             alignItems: 'center',
             position: 'absolute',
-            right: 60,
-            top: -40,
+            right: 50,
+            top: -50,
+            // height: 100,
+            // width: 100,
+            height: 100,
+            width: 100
           }}>
-          <TouchableOpacity
-            style={{
-              backgroundColor: '#FFFFFF',
-              top: 20,
-              borderRadius: 50,
-            }}>
+
             <ModalTester
               name={(val) => setName(val)}
-              api={() => {
-                searchApi(current, 'current');
-                searchApi(week, 'week');
+              api={(val) => {
+                setIsCompleted(false);
+                console.log("api trigger", val.toUpperCase());
+                setName(val);
+                // if (name === null) {
+                  var city = val.toUpperCase();
+                  var cityKey = city !== null ? ( city === 'DELHI' ? '/202396' : '/204842' ) : null;
+                  const week = `forecasts/v1/daily/5day${cityKey}`;
+                  const current = `currentconditions/v1${cityKey}`;
+                  searchApi(current, 'current');
+                  searchApi(week, 'week');
+                // }
+                // setTimeout(() => {
+                //   searchApi(current, 'current');
+                //   searchApi(week, 'week');
+                // }, 2000);
+                
               }}
             />
-          </TouchableOpacity>
         </View>
         {console.log(results !== '' ? results[0].Day.IconPhrase : 0)}
         {console.log(results.length)}

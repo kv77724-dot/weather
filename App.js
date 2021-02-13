@@ -4,6 +4,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import IndexScreen from './src/screens/index';
 // import ModalTester from './src/screens/mymodal';
+import Act from "./src/screens/activity";
 
 const Stack = createStackNavigator();
 
@@ -19,8 +20,8 @@ export default function App() {
           }}
         />
         {/* <Stack.Screen
-          name="Home"
-          component={ModalTester}
+          name="Act"
+          component={Act}
           options={{
             headerShown: false,
           }}

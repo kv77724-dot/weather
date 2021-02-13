@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/Feather';
 function ModalTester({name, api}) {
   //   console.log('props', );
   const [isModalVisible, setModalVisible] = useState(false);
-  const [city, setCity] = useState('Mumbai');
+  const [city, setCity] = useState(null);
 
   console.log('city', city);
   const toggleModal = () => {
@@ -20,22 +20,35 @@ function ModalTester({name, api}) {
         alignItems: 'center',
       }}>
       {/* <Button title="Show modal" onPress={toggleModal} /> */}
-      <View
+      <TouchableOpacity
         style={{
-          borderRadius: 50,
           bottom: 0,
-          backgroundColor: "#FFFFFF"
-        }}>
-        <Icon
-          style={{fontSize: 50}}
-          name="plus"
-          color="#293F58"
-          onPress={
+          alignItems: "center",
+          justifyContent: "center",
+          // borderColor: "purple",
+          // borderWidth: 2,
+        }}
+        onPress={
             //   console.log('Add clicked..');
             toggleModal
+          }> 
+        <Text style={
+          {
+            // height: 100,
+            // width: 100,
+            backgroundColor: "#FFFFFF",
+            borderRadius: 100,
           }
-        />
-      </View>
+        }>
+          <Icon
+            style={{
+              fontSize: 50,
+            }}
+            name="plus"
+            color="#293F58"
+          />
+        </Text>
+      </TouchableOpacity>
 
       <Modal isVisible={isModalVisible}>
         <View
@@ -44,9 +57,14 @@ function ModalTester({name, api}) {
             justifyContent: 'center',
             alignItems: 'center',
             backgroundColor: 'black',
+            top: -10,
             borderRadius: 2,
+            borderColor: "red",
+            borderWidth: 5
             // top: 100,
-          }}>
+          }}
+          onPressOut={console.log("Clicked out")}
+        >
           <Text style={{fontSize: 30, color: "#FFF", marginVertical: 10}}>Select a city</Text>
           <TouchableOpacity
             onPress={() => {
@@ -54,7 +72,7 @@ function ModalTester({name, api}) {
               name('Mumbai');
               console.log(city);
               toggleModal();
-              api();
+              api("Mumbai");
             }}>
             <Text style={styles.city}>Mumbai</Text>
           </TouchableOpacity>
@@ -64,7 +82,7 @@ function ModalTester({name, api}) {
               name('Delhi');
               console.log(city);
               toggleModal();
-              api();
+              api("Delhi");
             }}>
             <Text style={styles.city}>Delhi</Text>
           </TouchableOpacity>
