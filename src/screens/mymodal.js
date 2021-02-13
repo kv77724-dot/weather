@@ -24,11 +24,12 @@ function ModalTester({name, api}) {
         style={{
           borderRadius: 50,
           bottom: 0,
+          backgroundColor: "#FFFFFF"
         }}>
         <Icon
           style={{fontSize: 50}}
           name="plus"
-          color="white"
+          color="#293F58"
           onPress={
             //   console.log('Add clicked..');
             toggleModal
@@ -39,13 +40,14 @@ function ModalTester({name, api}) {
       <Modal isVisible={isModalVisible}>
         <View
           style={{
-            height: '20%',
+            height: '30%',
             justifyContent: 'center',
             alignItems: 'center',
             backgroundColor: 'black',
             borderRadius: 2,
             // top: 100,
           }}>
+          <Text style={{fontSize: 30, color: "#FFF", marginVertical: 10}}>Select a city</Text>
           <TouchableOpacity
             onPress={() => {
               setCity('Mumbai');
@@ -77,6 +79,7 @@ const styles = StyleSheet.create({
     fontSize: 30,
     borderColor: 'white',
     borderWidth: 2,
+    color: "white",
     width: 150,
     marginBottom: 10,
     textAlign: 'center',

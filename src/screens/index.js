@@ -173,7 +173,7 @@ const Index = (props) => {
           }}>
           <TouchableOpacity
             style={{
-              backgroundColor: 'white',
+              backgroundColor: '#FFFFFF',
               top: 20,
               borderRadius: 50,
             }}>

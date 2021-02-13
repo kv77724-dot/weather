@@ -21,7 +21,7 @@ function Days({ title, temp, dayCondition }) {
     }
     return (
         <View style={styles.forecastBar}>
-          <Text style={{fontSize: 20, color: '#697F97', width: 102}}>{title}</Text>
+          <Text style={{fontSize: 20, color: '#697F97', width: 110}}>{title}</Text>
           <Text style={{fontSize: 20, color: '#697F97'}}>{temp + '\xB0'}</Text>
           <Image
             source={url}
